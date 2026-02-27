@@ -6,18 +6,14 @@
     <title>沐绘匠心 - 东隅已逝，桑榆非晚</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+@300;400SC:wght;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --cinnabar: #9d2933;    /* 朱砂 */
-            --gold: #c9a227;         /* 赤金 */
-            --verdigris: #4183a1;   /* 青铜 */
-            --ink: #1a1a1a;         /* 墨 */
-            --paper: #f4efe4;       /* 宣纸 */
-            --jade: #4a6741;        /* 翠玉 */
-            --ochre: #9c7c3a;       /* 赭石 */
+            --cinnabar: #9d2933;
+            --gold: #c9a227;
+            --ink: #1a1a1a;
+            --paper: #f4efe4;
+            --jade: #4a6741;
         }
 
         * {
@@ -27,25 +23,25 @@
         }
 
         html {
-            overflow: hidden;
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
             background: var(--ink);
             color: var(--paper);
-            overflow: hidden;
-        }
-
-        /* 横向滚动容器 */
-        .scroll-wrapper {
-            display: flex;
-            width: 500vw;
+            overflow-x: auto;
             height: 100vh;
-            overflow: hidden;
         }
 
-        /* 每个板块 */
+        /* 整个页面横向布局 */
+        .horizontal-scroll {
+            display: flex;
+            width: fit-content;
+            height: 100vh;
+        }
+
+        /* 每个面板 */
         .panel {
             width: 100vw;
             height: 100vh;
@@ -57,37 +53,26 @@
             overflow: hidden;
         }
 
-        /* 背景图层 - 用于视差 */
-        .panel-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 120%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .panel-content {
-            position: relative;
-            z-index: 10;
+        /* 内容区域 */
+        .panel-inner {
             max-width: 800px;
             padding: 2rem;
             text-align: center;
             opacity: 0;
-            transform: translateY(60px);
+            transform: translateY(80px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .panel-content.reveal {
+        .panel-inner.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* 标题样式 */
+        /* 标题 */
         .panel-title {
             font-size: 4rem;
             font-weight: 300;
-            letter-spacing: 0.5em;
+            letter-spacing: 0.4em;
             margin-bottom: 1rem;
         }
 
@@ -98,68 +83,56 @@
             margin-bottom: 3rem;
         }
 
-        /* 文字内容 */
+        /* 文字 */
         .panel-text {
-            font-size: 1.15rem;
-            line-height: 2.4;
-            color: rgba(244, 239, 228, 0.85);
+            font-size: 1.2rem;
+            line-height: 2.8;
+            color: rgba(244, 239, 228, 0.8);
         }
 
         .panel-text p {
-            margin-bottom: 1.2rem;
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-
-        .panel-text p.show {
-            opacity: 1;
-            transform: translateX(0);
+            margin-bottom: 1rem;
         }
 
         .highlight {
             color: var(--cinnabar);
-            font-style: italic;
         }
 
         /* 标签 */
-        .panel-tags {
+        .tags {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
             flex-wrap: wrap;
             margin-top: 3rem;
-            opacity: 0;
-            transform: translateY(30px);
         }
 
-        .panel-tags.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .panel-tag {
-            padding: 0.7rem 1.8rem;
+        .tag {
+            padding: 0.8rem 2rem;
             border: 1px solid var(--gold);
             color: var(--gold);
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
             transition: all 0.3s;
         }
 
-        .panel-tag:hover {
+        .tag:hover {
             background: var(--gold);
             color: var(--ink);
         }
 
         /* 首页 */
-        #panel-hero {
-            background: linear-gradient(135deg, var(--ink) 0%, #2a2a2a 100%);
+        #panel-1 {
+            background: linear-gradient(135deg, var(--ink) 0%, #252525 100%);
         }
 
-        #panel-hero .panel-bg {
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(157, 41, 51, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(74, 103, 65, 0.1) 0%, transparent 50%);
+        #panel-1::before {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(157, 41, 51, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .hero-logo {
@@ -173,170 +146,72 @@
             font-size: 2.2rem;
             color: var(--cinnabar);
             margin: 0 auto 3rem;
-            background: rgba(157, 41, 51, 0.1);
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        .hero-logo.show {
-            opacity: 1;
-            transform: scale(1);
         }
 
         .hero-title {
             font-size: 5rem;
-            letter-spacing: 0.6em;
+            letter-spacing: 0.5em;
         }
 
         .hero-slogan {
             font-family: 'Ma Shan Zheng', cursive;
             font-size: 2.2rem;
             color: var(--cinnabar);
-            letter-spacing: 0.4em;
         }
 
-        /* 滚动提示 */
-        .scroll-hint {
-            position: fixed;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 100;
-            opacity: 1;
-            transition: opacity 0.5s;
+        /* 关于 */
+        #panel-2 {
+            background: linear-gradient(180deg, #1f1f1f 0%, var(--ink) 100%);
         }
 
-        .scroll-hint.hidden {
-            opacity: 0;
-            pointer-events: none;
+        /* 视频 */
+        #panel-3 {
+            background: var(--ink);
         }
 
-        .scroll-hint span {
-            font-size: 0.8rem;
-            color: var(--gold);
-            letter-spacing: 0.2em;
-            margin-bottom: 0.5rem;
-        }
-
-        .scroll-arrow {
-            width: 30px;
-            height: 30px;
-            border-right: 2px solid var(--cinnabar);
-            border-bottom: 2px solid var(--cinnabar);
-            transform: rotate(-45deg);
-            animation: arrowMove 2s infinite;
-        }
-
-        @keyframes arrowMove {
-            0%, 100% { transform: rotate(-45deg) translateX(0); }
-            50% { transform: rotate(-45deg) translateX(10px); }
-        }
-
-        /* 进度条 */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: var(--cinnabar);
-            width: 0;
-            z-index: 1000;
-            transition: width 0.1s;
-        }
-
-        /* 页码指示器 */
-        .page-indicators {
-            position: fixed;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            z-index: 100;
-        }
-
-        .page-dot {
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--gold);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .page-dot.active {
-            background: var(--cinnabar);
-            border-color: var(--cinnabar);
-        }
-
-        /* 视频卡片 */
-        .video-container {
+        .cards-wrapper {
             display: flex;
             gap: 2rem;
             overflow-x: auto;
             padding: 1rem 0;
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 1100px;
         }
 
-        .video-card {
-            flex: 0 0 350px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(201, 162, 39, 0.3);
-            opacity: 0;
-            transform: translateY(40px);
+        .card {
+            flex: 0 0 340px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(201, 162, 39, 0.2);
         }
 
-        .video-card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 175%;
-            height: 0;
+        .card-video {
+            aspect-ratio: 9/16;
             background: #000;
         }
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .card-video iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .video-info {
+        .card-info {
             padding: 1.2rem;
+            text-align: left;
         }
 
-        .video-info h3 {
+        .card-info h3 {
             font-size: 1.1rem;
-            font-weight: 400;
             margin-bottom: 0.3rem;
         }
 
-        .video-info p {
+        .card-info p {
             font-size: 0.85rem;
-            color: rgba(244, 239, 228, 0.6);
+            color: rgba(244, 239, 228, 0.5);
         }
 
-        /* 作品卡片 */
-        .works-container {
-            display: flex;
-            gap: 2rem;
-            overflow-x: auto;
-            padding: 1rem 0;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+        /* 作品 */
+        #panel-4 {
+            background: linear-gradient(180deg, var(--ink) 0%, #1f1f1f 100%);
         }
 
         .work-card {
@@ -344,27 +219,20 @@
             height: 380px;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        .work-card.show {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .work-bg {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--ochre) 0%, var(--cinnabar) 100%);
+            background: linear-gradient(135deg, var(--cinnabar) 0%, #6b1f26 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.6s;
+            transition: transform 0.5s;
         }
 
         .work-card:hover .work-bg {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         .work-icon {
@@ -383,47 +251,33 @@
             fill: none;
         }
 
-        .work-overlay {
+        .work-text {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             padding: 1.5rem;
-            background: linear-gradient(to top, rgba(26,26,26,0.95) 0%, transparent 100%);
-            transform: translateY(100%);
-            transition: transform 0.4s;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
         }
 
-        .work-card:hover .work-overlay {
-            transform: translateY(0);
-        }
-
-        .work-overlay h3 {
-            font-size: 1.15rem;
+        .work-text h3 {
+            font-size: 1.1rem;
             margin-bottom: 0.3rem;
         }
 
-        .work-overlay p {
-            font-size: 0.85rem;
+        .work-text p {
+            font-size: 0.8rem;
             color: var(--gold);
         }
 
         /* 联系 */
-        .contact-box {
-            max-width: 500px;
-            padding: 4rem;
-            border: 2px solid var(--gold);
-            position: relative;
+        #panel-5 {
+            background: linear-gradient(180deg, #1f1f1f 0%, var(--ink) 100%);
         }
 
-        .contact-box::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 1px solid rgba(201, 162, 39, 0.5);
+        .contact-box {
+            padding: 4rem;
+            border: 2px solid var(--gold);
         }
 
         .contact-box h2 {
@@ -436,8 +290,8 @@
         .contact-box p {
             font-size: 1.1rem;
             line-height: 2;
-            color: rgba(244, 239, 228, 0.7);
             margin-bottom: 2rem;
+            color: rgba(244, 239, 228, 0.7);
         }
 
         .contact-btn {
@@ -446,16 +300,49 @@
             background: var(--cinnabar);
             color: var(--paper);
             text-decoration: none;
-            font-size: 1rem;
-            letter-spacing: 0.2em;
             transition: all 0.3s;
-            border: none;
-            cursor: pointer;
         }
 
         .contact-btn:hover {
             background: var(--gold);
             color: var(--ink);
+        }
+
+        /* 导航指示器 */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: var(--cinnabar);
+            border-color: var(--cinnabar);
+        }
+
+        /* 进度条 */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--cinnabar);
+            width: 0;
+            z-index: 100;
         }
 
         /* 响应式 */
@@ -468,43 +355,28 @@
                 font-size: 3rem;
             }
             
-            .hero-slogan {
-                font-size: 1.5rem;
-            }
-            
-            .video-card,
-            .work-card {
+            .card {
                 flex: 0 0 280px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 进度条 -->
-    <div class="progress-bar" id="progressBar"></div>
-
-    <!-- 页码指示器 -->
-    <div class="page-indicators">
-        <div class="page-dot active" data-panel="0"></div>
-        <div class="page-dot" data-panel="1"></div>
-        <div class="page-dot" data-panel="2"></div>
-        <div class="page-dot" data-panel="3"></div>
-        <div class="page-dot" data-panel="4"></div>
+    <div class="progress" id="progress"></div>
+    
+    <div class="nav-dots" id="navDots">
+        <div class="nav-dot active" data-index="0"></div>
+        <div class="nav-dot" data-index="1"></div>
+        <div class="nav-dot" data-index="2"></div>
+        <div class="nav-dot" data-index="3"></div>
+        <div class="nav-dot" data-index="4"></div>
     </div>
 
-    <!-- 滚动提示 -->
-    <div class="scroll-hint" id="scrollHint">
-        <span>左右滑动</span>
-        <div class="scroll-arrow"></div>
-    </div>
-
-    <!-- 横向滚动容器 -->
-    <div class="scroll-wrapper" id="scrollWrapper">
+    <div class="horizontal-scroll" id="scrollContainer">
         
         <!-- 首页 -->
-        <section class="panel" id="panel-hero">
-            <div class="panel-bg"></div>
-            <div class="panel-content">
+        <section class="panel" id="panel-1">
+            <div class="panel-inner">
                 <div class="hero-logo">沐绘</div>
                 <h1 class="hero-title">沐绘匠心</h1>
                 <p class="hero-slogan">东隅已逝，桑榆非晚</p>
@@ -512,8 +384,8 @@
         </section>
 
         <!-- 关于 -->
-        <section class="panel" id="panel-about" style="background: linear-gradient(180deg, #2a2a2a 0%, var(--ink) 100%);">
-            <div class="panel-content">
+        <section class="panel" id="panel-2">
+            <div class="panel-inner">
                 <h2 class="panel-title">关于</h2>
                 <p class="panel-subtitle">致梦想主义者</p>
                 
@@ -523,49 +395,47 @@
                     <p>当别人忙着低头赶路，你却抬头看天；</p>
                     <p>当世界用KPI衡量价值，你却在心里默默守护着</p>
                     <p><span class="highlight">一首诗、一幅画、一段旋律，或是一个无人理解的念头。</span></p>
-                    <p>你不是不合时宜，你只是未曾遗忘——</p>
-                    <p>未曾遗忘自己最初为何出发。</p>
                 </div>
                 
-                <div class="panel-tags">
-                    <span class="panel-tag">建筑设计</span>
-                    <span class="panel-tag">文化研究</span>
-                    <span class="panel-tag">传统营造</span>
-                    <span class="panel-tag">西史辩伪</span>
+                <div class="tags">
+                    <span class="tag">建筑设计</span>
+                    <span class="tag">文化研究</span>
+                    <span class="tag">传统营造</span>
+                    <span class="tag">西史辩伪</span>
                 </div>
             </div>
         </section>
 
         <!-- 视频 -->
-        <section class="panel" id="panel-videos" style="background: var(--ink);">
-            <div class="panel-content">
+        <section class="panel" id="panel-3">
+            <div class="panel-inner">
                 <h2 class="panel-title">视频</h2>
                 <p class="panel-subtitle">文化复兴 · 西史辩伪</p>
                 
-                <div class="video-container">
-                    <div class="video-card">
-                        <div class="video-wrapper">
+                <div class="cards-wrapper">
+                    <div class="card">
+                        <div class="card-video">
                             <iframe src="https://www.douyin.com/iframe/7118415461530495272" allowfullscreen></iframe>
                         </div>
-                        <div class="video-info">
+                        <div class="card-info">
                             <h3>文明探源</h3>
                             <p>探索被掩埋的历史真相</p>
                         </div>
                     </div>
-                    <div class="video-card">
-                        <div class="video-wrapper">
+                    <div class="card">
+                        <div class="card-video">
                             <iframe src="https://www.douyin.com/iframe/7117981879962896672" allowfullscreen></iframe>
                         </div>
-                        <div class="video-info">
+                        <div class="card-info">
                             <h3>建筑文化</h3>
                             <p>东方建筑的智慧与美学</p>
                         </div>
                     </div>
-                    <div class="video-card">
-                        <div class="video-wrapper">
+                    <div class="card">
+                        <div class="card-video">
                             <iframe src="https://www.douyin.com/iframe/7116572686461532471" allowfullscreen></iframe>
                         </div>
-                        <div class="video-info">
+                        <div class="card-info">
                             <h3>西史辩伪</h3>
                             <p>重新审视西方历史叙事</p>
                         </div>
@@ -575,12 +445,12 @@
         </section>
 
         <!-- 作品 -->
-        <section class="panel" id="panel-works" style="background: linear-gradient(180deg, var(--ink) 0%, #2a2a2a 100%);">
-            <div class="panel-content">
+        <section class="panel" id="panel-4">
+            <div class="panel-inner">
                 <h2 class="panel-title">作品</h2>
                 <p class="panel-subtitle">传承千年之魂 · 构筑时代之境</p>
                 
-                <div class="works-container">
+                <div class="cards-wrapper">
                     <div class="work-card">
                         <div class="work-bg">
                             <div class="work-icon">
@@ -589,7 +459,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="work-overlay">
+                        <div class="work-text">
                             <h3>传统建筑修复</h3>
                             <p>古建筑保护与活化设计</p>
                         </div>
@@ -603,7 +473,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="work-overlay">
+                        <div class="work-text">
                             <h3>现代东方空间</h3>
                             <p>传统美学与现代功能的融合</p>
                         </div>
@@ -617,7 +487,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="work-overlay">
+                        <div class="work-text">
                             <h3>文化空间设计</h3>
                             <p>博物馆、展厅、文创空间</p>
                         </div>
@@ -627,8 +497,8 @@
         </section>
 
         <!-- 联系 -->
-        <section class="panel" id="panel-contact" style="background: linear-gradient(180deg, #2a2a2a 0%, var(--ink) 100%);">
-            <div class="panel-content">
+        <section class="panel" id="panel-5">
+            <div class="panel-inner">
                 <div class="contact-box">
                     <h2>开启你的东方美学空间</h2>
                     <p>
@@ -643,205 +513,79 @@
     </div>
 
     <script>
-        // 注册 ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
+        const container = document.getElementById('scrollContainer');
+        const panels = document.querySelectorAll('.panel');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const progress = document.getElementById('progress');
+        const panelInners = document.querySelectorAll('.panel-inner');
 
         // 横向滚动
-        const wrapper = document.getElementById('scrollWrapper');
-        const panels = gsap.utils.toArray('.panel');
-        const progressBar = document.getElementById('progressBar');
-        const scrollHint = document.getElementById('scrollHint');
-        const pageDots = document.querySelectorAll('.page-dot');
+        container.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                container.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
 
-        // 创建横向滚动的 Tween
-        let scrollTween = gsap.to(wrapper, {
-            x: () => -(wrapper.scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-                trigger: wrapper,
-                pin: true,
-                scrub: 1,
-                end: () => "+=" + wrapper.scrollWidth,
-                onUpdate: (self) => {
-                    // 更新进度条
-                    progressBar.style.width = (self.progress * 100) + '%';
-                    
-                    // 更新页码指示器
-                    const currentPanel = Math.round(self.progress * (panels.length - 1));
-                    pageDots.forEach((dot, i) => {
-                        dot.classList.toggle('active', i === currentPanel);
-                    });
-                },
-                onLeave: () => {
-                    scrollHint.classList.add('hidden');
-                },
-                onEnterBack: () => {
-                    scrollHint.classList.remove('hidden');
+        // 更新进度和导航点
+        function updateProgress() {
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            const current = container.scrollLeft;
+            const percent = (current / maxScroll) * 100;
+            
+            progress.style.width = percent + '%';
+            
+            // 计算当前面板
+            const panelWidth = container.clientWidth;
+            const currentPanel = Math.round(current / panelWidth);
+            
+            navDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentPanel);
+            });
+            
+            // 显示当前面板内容
+            panelInners.forEach((inner, i) => {
+                if (i === currentPanel) {
+                    inner.classList.add('visible');
+                } else {
+                    inner.classList.remove('visible');
                 }
-            }
-        });
-
-        // 视差背景效果
-        panels.forEach((panel, i) => {
-            const bg = panel.querySelector('.panel-bg');
-            if (bg) {
-                gsap.to(bg, {
-                    x: -100,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: panel,
-                        containerAnimation: scrollTween,
-                        start: "left right",
-                        end: "right left",
-                        scrub: true
-                    }
-                });
-            }
-        });
-
-        // 首页动画
-        gsap.to('#panel-hero .hero-logo', {
-            scrollTrigger: {
-                trigger: '#panel-hero',
-                containerAnimation: scrollTween,
-                start: "left 70%"
-            },
-            className: '+=show',
-            duration: 1,
-            ease: "power3.out"
-        });
-
-        gsap.to('#panel-hero .panel-content', {
-            scrollTrigger: {
-                trigger: '#panel-hero',
-                containerAnimation: scrollTween,
-                start: "left 60%"
-            },
-            className: '+=reveal',
-            duration: 1,
-            delay: 0.3,
-            ease: "power3.out"
-        });
-
-        // 关于区域动画
-        gsap.to('#panel-about .panel-content', {
-            scrollTrigger: {
-                trigger: '#panel-about',
-                containerAnimation: scrollTween,
-                start: "left 60%"
-            },
-            className: '+=reveal',
-            duration: 1,
-            ease: "power3.out"
-        });
-
-        // 文字逐段显示
-        gsap.utils.toArray('#panel-about .panel-text p').forEach((p, i) => {
-            gsap.to(p, {
-                scrollTrigger: {
-                    trigger: '#panel-about',
-                    containerAnimation: scrollTween,
-                    start: "left 50%"
-                },
-                className: '+=show',
-                duration: 0.8,
-                delay: i * 0.15,
-                ease: "power2.out"
             });
-        });
+        }
 
-        // 标签显示
-        gsap.to('#panel-about .panel-tags', {
-            scrollTrigger: {
-                trigger: '#panel-about',
-                containerAnimation: scrollTween,
-                start: "left 30%"
-            },
-            className: '+=show',
-            duration: 0.8,
-            ease: "power2.out"
-        });
-
-        // 视频卡片动画
-        gsap.utils.toArray('#panel-videos .video-card').forEach((card, i) => {
-            gsap.to(card, {
-                scrollTrigger: {
-                    trigger: '#panel-videos',
-                    containerAnimation: scrollTween,
-                    start: "left 50%"
-                },
-                className: '+=show',
-                duration: 0.8,
-                delay: i * 0.2,
-                ease: "power2.out"
-            });
-        });
-
-        // 作品卡片动画
-        gsap.utils.toArray('#panel-works .work-card').forEach((card, i) => {
-            gsap.to(card, {
-                scrollTrigger: {
-                    trigger: '#panel-works',
-                    containerAnimation: scrollTween,
-                    start: "left 50%"
-                },
-                className: '+=show',
-                duration: 0.8,
-                delay: i * 0.2,
-                ease: "power2.out"
-            });
-        });
-
-        // 联系区域动画
-        gsap.to('#panel-contact .panel-content', {
-            scrollTrigger: {
-                trigger: '#panel-contact',
-                containerAnimation: scrollTween,
-                start: "left 60%"
-            },
-            className: '+=reveal',
-            duration: 1,
-            ease: "power3.out"
-        });
-
-        // 点击页码跳转
-        pageDots.forEach((dot, i) => {
+        // 点击导航点跳转
+        navDots.forEach(dot => {
             dot.addEventListener('click', () => {
-                const targetProgress = i / (panels.length - 1);
-                gsap.to(window, {
-                    scrollTo: { y: targetProgress * wrapper.scrollWidth, autoKill: false },
-                    duration: 1.5,
-                    ease: "power3.inOut"
+                const index = parseInt(dot.dataset.index);
+                const targetScroll = index * window.innerWidth;
+                container.scrollTo({
+                    left: targetScroll,
+                    behavior: 'smooth'
                 });
             });
         });
 
-        // 鼠标滚轮切换（可选）
-        let isDown = false;
-        let startX;
-        let scrollLeft;
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchScrollLeft = 0;
 
-        wrapper.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX - wrapper.offsetLeft;
-            scrollLeft = wrapper.scrollLeft;
+        container.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].pageX;
+            touchScrollLeft = container.scrollLeft;
         });
 
-        wrapper.addEventListener('mouseleave', () => {
-            isDown = false;
+        container.addEventListener('touchmove', (e) => {
+            const touchX = e.touches[0].pageX;
+            const diff = touchStartX - touchX;
+            container.scrollLeft = touchScrollLeft + diff;
         });
 
-        wrapper.addEventListener('mouseup', () => {
-            isDown = false;
-        });
-
-        wrapper.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - wrapper.offsetLeft;
-            const walk = (x - startX) * 2;
-            wrapper.scrollLeft = scrollLeft - walk;
-        });
+        // 初始化
+        container.addEventListener('scroll', updateProgress);
+        updateProgress();
+        
+        // 初始显示第一个
+        panelInners[0].classList.add('visible');
     </script>
 </body>
 </html>
