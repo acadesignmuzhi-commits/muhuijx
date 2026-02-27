@@ -6,17 +6,14 @@
     <title>沐绘匠心 - 东隅已逝，桑榆非晚</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ==================== 敦煌色系 ==================== */
         :root {
-            --dunhuang-red: #8B3A3A;      /* 赭红 */
-            --dunhuang-ochre: #C4A35A;    /* 金色 */
-            --dunhuang-blue: #2D5A5A;     /* 石青 */
-            --dunhuang-cream: #F5EFE0;    /* 洞窟白 */
-            --dunhuang-black: #1A1612;    /* 墨黑 */
-            --dunhuang-sand: #D4C4A8;    /* 沙土 */
-            --ink-dark: #2C241B;
+            --dunhuang-red: #8B3A3A;
+            --dunhuang-gold: #C4A35A;
+            --dunhuang-blue: #2D5A5A;
+            --dunhuang-cream: #F5EFE0;
+            --dunhuang-black: #1A1612;
         }
 
         * {
@@ -25,286 +22,300 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        html, body {
+            height: 100%;
+            overflow: hidden;
         }
 
         body {
-            font-family: 'Noto Serif SC', 'ZCOOL XiaoWei', serif;
-            background: var(--dunhuang-cream);
-            color: var(--ink-dark);
-            overflow-x: hidden;
-            line-height: 1.8;
+            font-family: 'Noto Serif SC', serif;
+            background: var(--dunhuang-black);
+            color: var(--dunhuang-cream);
         }
 
-        /* ==================== 背景纹理 ==================== */
-        .bg-texture {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* 主容器 */
+        .container {
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.4;
-            background-image: 
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* ==================== 导航 ==================== */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1.5rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.4s ease;
-        }
-
-        nav.scrolled {
-            background: rgba(245, 239, 224, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1rem 3rem;
-            box-shadow: 0 2px 20px rgba(26, 22, 18, 0.08);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .logo-img {
-            width: 42px;
-            height: 42px;
-            border: 2px solid var(--dunhuang-red);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            color: var(--dunhuang-red);
-            font-family: 'Ma Shan Zheng', cursive;
-            background: transparent;
-        }
-
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            color: var(--dunhuang-black);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--ink-dark);
-            font-size: 0.9rem;
-            letter-spacing: 0.15em;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--dunhuang-red);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--dunhuang-red);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* ==================== Hero 区域 ==================== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
+            height: 100vh;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
+        /* 首页 - 太极图案 */
+        .home-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s;
+            z-index: 10;
+        }
+
+        .home-screen.hidden {
+            transform: scale(1.5);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 背景视差层 */
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 120%;
+            top: -10%;
+            left: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(139, 58, 58, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(45, 90, 90, 0.1) 0%, transparent 50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        /* 太极图案 */
+        .taiji {
+            width: 280px;
+            height: 280px;
+            position: relative;
+            margin-bottom: 3rem;
+            cursor: pointer;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .taiji-ring {
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--dunhuang-gold);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .taiji-inner {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+        }
+
+        .taiji-inner.left {
+            left: 0;
+            background: var(--dunhuang-red);
+            border-radius: 140px 0 0 140px;
+        }
+
+        .taiji-inner.right {
+            right: 0;
+            background: var(--dunhuang-cream);
+            border-radius: 0 140px 140px 0;
+        }
+
+        .taiji-dot {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .taiji-dot.red {
+            right: 10%;
+            background: var(--dunhuang-red);
+        }
+
+        .taiji-dot.cream {
+            left: 10%;
+            background: var(--dunhuang-cream);
+        }
+
+        .taiji-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.8rem;
+            color: var(--dunhuang-black);
+            writing-mode: vertical-rl;
+        }
+
+        .home-title {
+            font-size: 3rem;
+            letter-spacing: 0.5em;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+
+        .home-slogan {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.5rem;
+            color: var(--dunhuang-gold);
+            letter-spacing: 0.3em;
+        }
+
+        /* 四象限入口 - 八卦布局 */
+        .gate-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 700px;
+            width: 90%;
+        }
+
+        .gate-item {
+            aspect-ratio: 1;
+            border: 1px solid var(--dunhuang-gold);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .gate-item::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 80%, rgba(139, 58, 58, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(45, 90, 90, 0.06) 0%, transparent 50%);
-            z-index: -1;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(196, 163, 90, 0.2), transparent);
+            transition: left 0.5s;
         }
 
-        /* 装饰线条 - 工笔风格 */
-        .hero-decoration {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(139, 58, 58, 0.15);
-            transform: rotate(45deg);
-            opacity: 0.5;
+        .gate-item:hover::before {
+            left: 100%;
         }
 
-        .hero-decoration.top-right {
-            top: -100px;
-            right: -100px;
+        .gate-item:hover {
+            background: rgba(196, 163, 90, 0.1);
+            transform: scale(1.05);
+            border-color: var(--dunhuang-red);
         }
 
-        .hero-decoration.bottom-left {
-            bottom: -150px;
-            left: -150px;
-        }
-
-        .hero-logo {
-            width: 120px;
-            height: 120px;
-            border: 3px solid var(--dunhuang-red);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--dunhuang-red);
-            font-family: 'Ma Shan Zheng', cursive;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 400;
-            letter-spacing: 0.5em;
-            margin-bottom: 1rem;
-            color: var(--dunhuang-black);
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .hero-slogan {
-            font-size: 1.2rem;
-            color: var(--dunhuang-red);
-            letter-spacing: 0.3em;
-            margin-bottom: 3rem;
-            font-family: 'Ma Shan Zheng', cursive;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .hero-desc {
-            max-width: 600px;
-            font-size: 1rem;
-            color: #666;
-            line-height: 2;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-indicator span {
-            display: block;
-            width: 20px;
-            height: 20px;
-            border-right: 2px solid var(--dunhuang-red);
-            border-bottom: 2px solid var(--dunhuang-red);
-            transform: rotate(45deg);
-            opacity: 0.6;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        /* ==================== 视频区域 ==================== */
-        .videos-section {
-            padding: 6rem 2rem;
-            background: var(--dunhuang-black);
-            color: var(--dunhuang-cream);
-            position: relative;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title h2 {
+        .gate-icon {
             font-size: 2.5rem;
-            font-weight: 400;
-            letter-spacing: 0.3em;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .section-title p {
-            color: var(--dunhuang-sand);
-            font-size: 0.95rem;
+        .gate-name {
+            font-size: 1.3rem;
             letter-spacing: 0.2em;
         }
 
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .gate-desc {
+            font-size: 0.8rem;
+            color: var(--dunhuang-gold);
+            margin-top: 0.3rem;
+        }
+
+        /* 内容页面 */
+        .content-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            background: var(--dunhuang-black);
+            z-index: 5;
+        }
+
+        .content-screen.active {
+            transform: translateX(0);
+        }
+
+        .content-screen.exit {
+            transform: translateX(-100%);
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--dunhuang-gold);
+            background: rgba(26, 22, 18, 0.9);
+            color: var(--dunhuang-gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: var(--dunhuang-gold);
+            color: var(--dunhuang-black);
+        }
+
+        /* 内容区域 */
+        .content-inner {
+            min-height: 100vh;
+            padding: 5rem 2rem 3rem;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .content-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+        }
+
+        .content-subtitle {
+            text-align: center;
+            color: var(--dunhuang-gold);
+            margin-bottom: 3rem;
+            font-size: 1rem;
+        }
+
+        /* 视频网格 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
         .video-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(196, 163, 90, 0.2);
-            padding: 1rem;
-            transition: all 0.4s ease;
+            overflow: hidden;
+            transition: all 0.4s;
         }
 
         .video-card:hover {
+            border-color: var(--dunhuang-gold);
             transform: translateY(-5px);
-            border-color: var(--dunhuang-ochre);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .video-wrapper {
             position: relative;
-            padding-bottom: 177%; /* 抖音比例 */
+            padding-bottom: 175%;
             height: 0;
-            overflow: hidden;
             background: #000;
         }
 
@@ -318,95 +329,86 @@
         }
 
         .video-info {
-            padding: 1rem 0.5rem;
+            padding: 1.2rem;
         }
 
         .video-info h3 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 400;
             margin-bottom: 0.5rem;
-            color: var(--dunhuang-cream);
         }
 
         .video-info p {
-            font-size: 0.8rem;
-            color: var(--dunhuang-sand);
+            font-size: 0.85rem;
+            color: #999;
         }
 
-        /* ==================== 作品区域 ==================== */
-        .works-section {
-            padding: 6rem 2rem;
-            background: var(--dunhuang-cream);
-        }
-
+        /* 作品网格 */
         .works-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .work-card {
             position: relative;
+            aspect-ratio: 4/3;
             overflow: hidden;
             cursor: pointer;
         }
 
-        .work-image {
+        .work-bg {
             width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, var(--dunhuang-sand) 0%, var(--dunhuang-ochre) 100%);
+            height: 100%;
+            background: linear-gradient(135deg, var(--dunhuang-sand, #D4C4A8) 0%, var(--dunhuang-gold) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s;
         }
 
-        .work-card:hover .work-image {
-            transform: scale(1.05);
+        .work-card:hover .work-bg {
+            transform: scale(1.1);
+        }
+
+        .work-icon {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--dunhuang-black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .work-overlay {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(to top, rgba(26, 22, 18, 0.9) 0%, transparent 50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             padding: 2rem;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            background: linear-gradient(to top, rgba(26, 22, 18, 0.95) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.4s;
         }
 
         .work-card:hover .work-overlay {
-            opacity: 1;
+            transform: translateY(0);
         }
 
         .work-overlay h3 {
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            color: var(--dunhuang-cream);
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
         }
 
         .work-overlay p {
             font-size: 0.85rem;
-            color: var(--dunhuang-sand);
+            color: var(--dunhuang-gold);
         }
 
-        /* ==================== 关于区域 ==================== */
-        .about-section {
-            padding: 6rem 2rem;
-            background: var(--dunhuang-black);
-            color: var(--dunhuang-cream);
-        }
-
+        /* 关于区域 */
         .about-content {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
             text-align: center;
         }
@@ -421,32 +423,29 @@
         .about-tags {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
             margin-top: 3rem;
         }
 
         .tag {
-            padding: 0.5rem 1.5rem;
-            border: 1px solid var(--dunhuang-ochre);
-            color: var(--dunhuang-ochre);
-            font-size: 0.85rem;
-            letter-spacing: 0.2em;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--dunhuang-gold);
+            color: var(--dunhuang-gold);
+            font-size: 0.9rem;
         }
 
-        /* ==================== 联系区域 ==================== */
-        .contact-section {
-            padding: 6rem 2rem;
-            background: var(--dunhuang-cream);
+        /* 联系区域 */
+        .contact-content {
             text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .contact-content h2 {
             font-size: 2rem;
-            font-weight: 400;
-            letter-spacing: 0.3em;
             margin-bottom: 2rem;
-            color: var(--dunhuang-black);
+            font-weight: 300;
         }
 
         .contact-btn {
@@ -457,271 +456,291 @@
             text-decoration: none;
             font-size: 1rem;
             letter-spacing: 0.2em;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             border: none;
             cursor: pointer;
         }
 
         .contact-btn:hover {
-            background: var(--dunhuang-black);
-            transform: translateY(-2px);
+            background: var(--dunhuang-gold);
+            color: var(--dunhuang-black);
         }
 
-        /* ==================== 页脚 ==================== */
-        footer {
-            padding: 2rem;
-            background: var(--dunhuang-black);
-            color: var(--dunhuang-sand);
-            text-align: center;
-            font-size: 0.8rem;
-        }
-
-        footer p {
-            letter-spacing: 0.1em;
-        }
-
-        /* ==================== 响应式 ==================== */
+        /* 响应式 */
         @media (max-width: 768px) {
-            nav {
-                padding: 1rem 1.5rem;
+            .home-title {
+                font-size: 2rem;
             }
             
-            .nav-links {
-                display: none;
+            .taiji {
+                width: 200px;
+                height: 200px;
             }
-
-            .hero h1 {
-                font-size: 2rem;
-                letter-spacing: 0.3em;
+            
+            .gate-grid {
+                gap: 1rem;
             }
-
-            .hero-slogan {
-                font-size: 1rem;
-            }
-
-            .section-title h2 {
+            
+            .content-title {
                 font-size: 1.8rem;
             }
-
-            .videos-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ==================== 视差效果 ==================== */
-        .parallax-bg {
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
         }
     </style>
 </head>
 <body>
-    <!-- 背景纹理 -->
-    <div class="bg-texture"></div>
+    <div class="container">
+        <!-- 背景视差层 -->
+        <div class="parallax-layer" id="parallaxBg"></div>
 
-    <!-- 导航 -->
-    <nav id="navbar">
-        <div class="logo">
-            <div class="logo-img">沐绘</div>
-            <span class="logo-text">沐绘匠心</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#videos">视频</a></li>
-            <li><a href="#works">作品</a></li>
-            <li><a href="#about">关于</a></li>
-            <li><a href="#contact">联系</a></li>
-        </ul>
-    </nav>
-
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-decoration top-right"></div>
-        <div class="hero-decoration bottom-left"></div>
-        
-        <div class="hero-logo">沐绘匠心</div>
-        <h1>沐绘匠心</h1>
-        <p class="hero-slogan">东隅已逝，桑榆非晚</p>
-        <p class="hero-desc">
-            以建筑为笔，以文化为墨<br>
-            在现代空间中书写东方的诗意与温度<br>
-            传统不是束之高阁的遗产，而是流动在当代生活中的智慧
-        </p>
-        
-        <div class="scroll-indicator">
-            <span></span>
-        </div>
-    </section>
-
-    <!-- 视频区域 -->
-    <section class="videos-section" id="videos">
-        <div class="section-title">
-            <h2>文化复兴</h2>
-            <p>西史辩伪 · 文化寻根</p>
-        </div>
-        
-        <div class="videos-grid">
-            <!-- 抖音视频 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe 
-                        src="https://www.douyin.com/iframe/7118415461530495272" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-info">
-                    <h3>文明探源</h3>
-                    <p>探索被掩埋的历史真相</p>
+        <!-- 首页 -->
+        <div class="home-screen" id="homeScreen">
+            <!-- 太极Logo -->
+            <div class="taiji" id="taijiLogo">
+                <div class="taiji-ring">
+                    <div class="taiji-inner left"></div>
+                    <div class="taiji-inner right">
+                        <div class="taiji-dot red"></div>
+                        <div class="taiji-dot cream"></div>
+                    </div>
+                    <div class="taiji-text">道</div>
                 </div>
             </div>
-
-            <!-- 抖音视频 2 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe 
-                        src="https://www.douyin.com/iframe/7117981879962896672" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-info">
-                    <h3>建筑文化</h3>
-                    <p>东方建筑的智慧与美学</p>
-                </div>
-            </div>
-
-            <!-- 抖音视频 3 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe 
-                        src="https://www.douyin.com/iframe/7116572686461532471" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-info">
-                    <h3>西史辩伪</h3>
-                    <p>重新审视西方历史叙事</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 作品区域 -->
-    <section class="works-section" id="works">
-        <div class="section-title">
-            <h2>建筑作品</h2>
-            <p>传承千年之魂 · 构筑时代之境</p>
-        </div>
-        
-        <div class="works-grid">
-            <div class="work-card">
-                <div class="work-image">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C4A35A" stroke-width="1">
-                        <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>
-                    </svg>
-                </div>
-                <div class="work-overlay">
-                    <h3>传统建筑修复</h3>
-                    <p>古建筑保护与活化设计</p>
-                </div>
-            </div>
-
-            <div class="work-card">
-                <div class="work-image">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C4A35A" stroke-width="1">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <path d="M3 9h18M9 21V9"/>
-                    </svg>
-                </div>
-                <div class="work-overlay">
-                    <h3>现代东方空间</h3>
-                    <p>传统美学与现代功能的融合</p>
-                </div>
-            </div>
-
-            <div class="work-card">
-                <div class="work-image">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C4A35A" stroke-width="1">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 6v6l4 2"/>
-                    </svg>
-                </div>
-                <div class="work-overlay">
-                    <h3>文化空间设计</h3>
-                    <p>博物馆、展厅、文创空间</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 关于区域 -->
-    <section class="about-section" id="about">
-        <div class="section-title">
-            <h2>关于</h2>
-        </div>
-        
-        <div class="about-content">
-            <p>
-                沐绘匠心，源自对中国传统文化的深厚热爱。<br>
-                我们相信，每一座建筑都是有生命的文化载体。<br>
-                致力于在现代设计中寻根东方美学，<br>
-                让传统文化在当代空间中焕发新生。
-            </p>
             
-            <div class="about-tags">
-                <span class="tag">建筑设计</span>
-                <span class="tag">文化研究</span>
-                <span class="tag">传统营造</span>
-                <span class="tag">西史辩伪</span>
+            <h1 class="home-title">沐绘匠心</h1>
+            <p class="home-slogan">东隅已逝，桑榆非晚</p>
+
+            <!-- 四象限入口 -->
+            <div class="gate-grid">
+                <a href="#" class="gate-item" data-gate="videos">
+                    <span class="gate-icon">🎬</span>
+                    <span class="gate-name">视频</span>
+                    <span class="gate-desc">文化复兴 西史辩伪</span>
+                </a>
+                <a href="#" class="gate-item" data-gate="works">
+                    <span class="gate-icon">🏛</span>
+                    <span class="gate-name">作品</span>
+                    <span class="gate-desc">建筑作品 空间设计</span>
+                </a>
+                <a href="#" class="gate-item" data-gate="about">
+                    <span class="gate-icon">📜</span>
+                    <span class="gate-name">关于</span>
+                    <span class="gate-desc">理念溯源 传承创新</span>
+                </a>
+                <a href="#" class="gate-item" data-gate="contact">
+                    <span class="gate-icon">📞</span>
+                    <span class="gate-name">联系</span>
+                    <span class="gate-desc">合作咨询 期待相遇</span>
+                </a>
             </div>
         </div>
-    </section>
 
-    <!-- 联系区域 -->
-    <section class="contact-section" id="contact">
-        <div class="contact-content">
-            <h2>开启你的东方美学空间</h2>
-            <a href="weixin://dl/login?from=singlemessage" class="contact-btn">添加微信咨询</a>
+        <!-- 视频页面 -->
+        <div class="content-screen" id="screenVideos">
+            <a href="#" class="back-btn" data-back="videos">←</a>
+            <div class="content-inner">
+                <h2 class="content-title">文化复兴</h2>
+                <p class="content-subtitle">西史辩伪 · 文化寻根</p>
+                
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.douyin.com/iframe/7118415461530495272" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>文明探源</h3>
+                            <p>探索被掩埋的历史真相</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.douyin.com/iframe/7117981879962896672" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>建筑文化</h3>
+                            <p>东方建筑的智慧与美学</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.douyin.com/iframe/7116572686461532471" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>西史辩伪</h3>
+                            <p>重新审视西方历史叙事</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
 
-    <!-- 页脚 -->
-    <footer>
-        <p>© 2024 沐绘匠心 · 东隅已逝，桑榆非晚</p>
-    </footer>
+        <!-- 作品页面 -->
+        <div class="content-screen" id="screenWorks">
+            <a href="#" class="back-btn" data-back="works">←</a>
+            <div class="content-inner">
+                <h2 class="content-title">建筑作品</h2>
+                <p class="content-subtitle">传承千年之魂 · 构筑时代之境</p>
+                
+                <div class="works-grid">
+                    <div class="work-card">
+                        <div class="work-bg">
+                            <div class="work-icon">
+                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1A1612" stroke-width="1.5">
+                                    <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>传统建筑修复</h3>
+                            <p>古建筑保护与活化设计</p>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <div class="work-bg">
+                            <div class="work-icon">
+                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1A1612" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <path d="M3 9h18M9 21V9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>现代东方空间</h3>
+                            <p>传统美学与现代功能的融合</p>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <div class="work-bg">
+                            <div class="work-icon">
+                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1A1612" stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>文化空间设计</h3>
+                            <p>博物馆、展厅、文创空间</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关于页面 -->
+        <div class="content-screen" id="screenAbout">
+            <a href="#" class="back-btn" data-back="about">←</a>
+            <div class="content-inner">
+                <h2 class="content-title">关于</h2>
+                
+                <div class="about-content">
+                    <p>
+                        沐绘匠心，源自对中国传统文化的深厚热爱。<br><br>
+                        我们相信，每一座建筑都是有生命的文化载体。<br><br>
+                        致力于在现代设计中寻根东方美学，<br><br>
+                        让传统文化在当代空间中焕发新生。
+                    </p>
+                    
+                    <div class="about-tags">
+                        <span class="tag">建筑设计</span>
+                        <span class="tag">文化研究</span>
+                        <span class="tag">传统营造</span>
+                        <span class="tag">西史辩伪</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 联系页面 -->
+        <div class="content-screen" id="screenContact">
+            <a href="#" class="back-btn" data-back="contact">←</a>
+            <div class="content-inner">
+                <div class="contact-content">
+                    <h2>开启你的东方美学空间</h2>
+                    <p style="margin-bottom: 2rem; color: #999;">
+                        让传统与现代对话<br>
+                        让文化与空间共生
+                    </p>
+                    <a href="weixin://dl/login?from=singlemessage" class="contact-btn">添加微信咨询</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 导航滚动效果
-        const navbar = document.getElementById('navbar');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+        // DOM 元素
+        const homeScreen = document.getElementById('homeScreen');
+        const taijiLogo = document.getElementById('taijiLogo');
+        const gateItems = document.querySelectorAll('.gate-item');
+        const backBtns = document.querySelectorAll('.back-btn');
+        const contentScreens = document.querySelectorAll('.content-screen');
+        const parallaxBg = document.getElementById('parallaxBg');
+
+        // 视差效果
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            parallaxBg.style.transform = `translate(${x}px, ${y}px)`;
         });
 
-        // 滚动动画
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // 点击太极进入（可选）
+        taijiLogo.addEventListener('click', () => {
+            // 保持首页，只做视差
+        });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        // 点击入口进入
+        gateItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const gate = item.dataset.gate;
+                navigateTo(gate);
             });
-        }, observerOptions);
+        });
 
-        document.querySelectorAll('.video-card, .work-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
+        // 返回按钮
+        backBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const screen = btn.dataset.back;
+                navigateBack(screen);
+            });
+        });
+
+        // 进入页面
+        function navigateTo(screenId) {
+            // 隐藏首页
+            homeScreen.classList.add('hidden');
+            
+            // 显示目标页面
+            const targetScreen = document.getElementById('screen' + screenId.charAt(0).toUpperCase() + screenId.slice(1));
+            setTimeout(() => {
+                targetScreen.classList.add('active');
+            }, 300);
+        }
+
+        // 返回首页
+        function navigateBack(screenId) {
+            const currentScreen = document.getElementById('screen' + screenId.charAt(0).toUpperCase() + screenId.slice(1));
+            
+            // 隐藏当前页面
+            currentScreen.classList.remove('active');
+            currentScreen.classList.add('exit');
+            
+            // 显示首页
+            setTimeout(() => {
+                currentScreen.classList.remove('exit');
+                homeScreen.classList.remove('hidden');
+            }, 300);
+        }
+
+        // 键盘返回
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeScreen = document.querySelector('.content-screen.active');
+                if (activeScreen) {
+                    const screenId = activeScreen.id.replace('screen', '').toLowerCase();
+                    navigateBack(screenId);
+                }
+            }
         });
     </script>
 </body>
