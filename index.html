@@ -11,14 +11,12 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <style>
         :root {
-            --ink: #1a1a1a;
-            --paper: #f4efe4;
-            --vermillion: #c23a2b;
-            --gold: #b8860b;
-            --indigo: #2c3e50;
-            --jade: #4a6741;
-            --cream: #e8dfc8;
-            --ochre: #9c7c3a;
+            --paper-red: #c41e3a;
+            --paper-red-dark: #8b0000;
+            --paper-white: #faf8f5;
+            --paper-cream: #f5efe0;
+            --ink-black: #1a1a1a;
+            --gold: #d4a84b;
         }
 
         * {
@@ -33,94 +31,114 @@
 
         body {
             font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
-            background: var(--paper);
-            color: var(--ink);
+            background: var(--paper-cream);
+            color: var(--ink-black);
             overflow-x: hidden;
         }
 
-        /* 固定背景 */
-        .fixed-bg {
+        /* 剪纸纹理背景 */
+        .paper-texture {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.5s;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(196, 30, 58, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(196, 30, 58, 0.03) 0%, transparent 40%);
+            z-index: -2;
         }
 
-        .fixed-bg.active {
-            opacity: 1;
-        }
-
-        /* 画卷容器 */
-        .scroll-container {
-            position: relative;
-        }
-
-        /* 第一屏：首页 */
-        .section-hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
+        /* 剪纸装饰图案 - 顶部 */
+        .paper-cut-top {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 120%;
-            background: 
-                radial-gradient(ellipse at 20% 30%, rgba(194, 58, 43, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(74, 103, 65, 0.08) 0%, transparent 50%),
-                linear-gradient(180deg, var(--paper) 0%, var(--cream) 100%);
-            z-index: -1;
+            height: 200px;
+            background: var(--paper-red);
+            clip-path: polygon(
+                0% 0%, 3% 5%, 6% 0%, 9% 6%, 12% 0%, 15% 4%, 18% 0%, 21% 5%, 
+                24% 0%, 27% 6%, 30% 0%, 33% 4%, 36% 0%, 39% 5%, 42% 0%, 45% 6%,
+                48% 0%, 51% 4%, 54% 0%, 57% 5%, 60% 0%, 63% 6%, 66% 0%, 69% 4%,
+                72% 0%, 75% 5%, 78% 0%, 81% 6%, 84% 0%, 87% 4%, 90% 0%, 93% 5%, 96% 0%, 100% 6%, 100% 100%, 0% 100%
+            );
+            z-index: 100;
+            opacity: 0.9;
         }
 
-        /* 画卷展开效果 - 左侧卷轴 */
-        .scroll-left {
+        /* 剪纸装饰 - 底部 */
+        .paper-cut-bottom {
             position: fixed;
+            bottom: 0;
             left: 0;
-            top: 0;
-            width: 60px;
-            height: 100vh;
-            background: linear-gradient(90deg, var(--ink) 0%, transparent 100%);
-            transform: translateX(-100%);
-            z-index: 1000;
+            width: 100%;
+            height: 150px;
+            background: var(--paper-red);
+            clip-path: polygon(
+                0% 100%, 5% 85%, 10% 100%, 15% 80%, 20% 100%, 25% 88%, 30% 100%, 
+                35% 82%, 40% 100%, 45% 85%, 50% 100%, 55% 80%, 60% 100%, 65% 88%,
+                70% 100%, 75% 82%, 80% 100%, 85% 85%, 90% 100%, 95% 80%, 100% 100%,
+                100% 0%, 0% 0%
+            );
+            z-index: 100;
+            opacity: 0.9;
         }
 
-        /* 右侧卷轴 */
-        .scroll-right {
+        /* 剪纸吉祥图案 */
+        .paper-cut-pattern {
             position: fixed;
-            right: 0;
-            top: 0;
-            width: 60px;
-            height: 100vh;
-            background: linear-gradient(-90deg, var(--ink) 0%, transparent 100%);
-            transform: translateX(100%);
-            z-index: 1000;
+            width: 300px;
+            height: 300px;
+            z-index: -1;
+            opacity: 0.08;
         }
 
-        /* 内容区块 */
+        .pattern-left {
+            left: -100px;
+            top: 20%;
+            background: var(--paper-red);
+            border-radius: 50%;
+            clip-path: polygon(
+                50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+            );
+        }
+
+        .pattern-right {
+            right: -100px;
+            bottom: 20%;
+            background: var(--paper-red);
+            border-radius: 50%;
+            clip-path: polygon(
+                50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+            );
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 各区块 */
         .section {
             min-height: 100vh;
-            padding: 8rem 15%;
-            position: relative;
+            padding: 8rem 10%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
             opacity: 0;
-            transform: translateY(100px);
+            transform: translateY(80px);
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section-content {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             width: 100%;
         }
@@ -130,120 +148,222 @@
             font-size: 3.5rem;
             font-weight: 300;
             letter-spacing: 0.5em;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
             position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--vermillion);
-            transition: width 1s ease 0.5s;
-        }
-
-        .section-title.expanded::after {
-            width: 100%;
         }
 
         .section-subtitle {
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 1.5rem;
-            color: var(--gold);
+            font-size: 1.4rem;
+            color: var(--paper-red);
+            text-align: center;
             margin-bottom: 4rem;
         }
 
+        /* 剪纸风格标题装饰 */
+        .title-decoration {
+            width: 200px;
+            height: 3px;
+            background: var(--paper-red);
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .title-decoration::before,
+        .title-decoration::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: var(--paper-red);
+            border-radius: 50%;
+        }
+
+        .title-decoration::before { left: 0; }
+        .title-decoration::after { right: 0; }
+
+        /* 首页 */
+        #hero {
+            text-align: center;
+            padding-top: 10rem;
+        }
+
+        .hero-logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .hero-logo::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--paper-red);
+            border-radius: 50%;
+        }
+
+        .hero-logo-box {
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--paper-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: var(--paper-red);
+            background: var(--paper-white);
+            position: relative;
+        }
+
+        /* 剪纸窗花效果 */
+        .hero-logo-box::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid var(--paper-red);
+            opacity: 0.3;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 0.6em;
+            margin-bottom: 1rem;
+        }
+
+        .hero-slogan {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: var(--paper-red);
+            letter-spacing: 0.4em;
+        }
+
         /* 文字内容 */
-        .text-block {
-            font-size: 1.2rem;
-            line-height: 2.4;
-            color: #444;
+        .text-content {
+            font-size: 1.15rem;
+            line-height: 2.6;
+            text-align: center;
+            color: #333;
         }
 
-        .text-block p {
-            margin-bottom: 2rem;
+        .text-content p {
+            margin-bottom: 1.5rem;
             opacity: 0;
-            transform: translateX(-50px);
+            transform: translateY(20px);
         }
 
-        .text-block p.reveal {
+        .text-content p.show {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
         .highlight {
-            color: var(--vermillion);
-            font-style: italic;
+            color: var(--paper-red);
+            font-weight: 500;
         }
 
         /* 标签 */
         .tags {
             display: flex;
+            justify-content: center;
             gap: 1.5rem;
             flex-wrap: wrap;
-            margin-top: 3rem;
+            margin-top: 4rem;
             opacity: 0;
             transform: translateY(30px);
         }
 
-        .tags.reveal {
+        .tags.show {
             opacity: 1;
             transform: translateY(0);
         }
 
         .tag {
             padding: 0.8rem 2rem;
-            border: 1px solid var(--gold);
-            color: var(--gold);
+            background: var(--paper-red);
+            color: var(--paper-white);
             font-size: 0.95rem;
             letter-spacing: 0.1em;
             transition: all 0.3s;
+            position: relative;
         }
 
         .tag:hover {
-            background: var(--gold);
-            color: var(--paper);
+            background: var(--ink-black);
+            transform: translateY(-3px);
         }
 
-        /* 视频卡片 */
-        .video-scroll {
+        /* 剪纸风格卡片容器 */
+        .card-container {
             display: flex;
-            gap: 3rem;
+            gap: 2rem;
             overflow-x: auto;
             padding: 2rem 0;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
         }
 
-        .video-scroll::-webkit-scrollbar {
-            height: 4px;
+        .card-container::-webkit-scrollbar {
+            height: 6px;
         }
 
-        .video-scroll::-webkit-scrollbar-track {
-            background: var(--cream);
+        .card-container::-webkit-scrollbar-track {
+            background: var(--paper-cream);
         }
 
-        .video-scroll::-webkit-scrollbar-thumb {
-            background: var(--gold);
+        .card-container::-webkit-scrollbar-thumb {
+            background: var(--paper-red);
+            border-radius: 3px;
         }
 
+        /* 剪纸风格视频卡片 */
         .video-card {
-            flex: 0 0 400px;
+            flex: 0 0 380px;
             scroll-snap-align: start;
-            background: white;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-            overflow: hidden;
+            background: var(--paper-white);
+            position: relative;
             opacity: 0;
-            transform: scale(0.9);
+            transform: translateX(-50px) rotate(-2deg);
+            box-shadow: 
+                8px 8px 0 var(--paper-red),
+                12px 12px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s;
         }
 
-        .video-card.reveal {
+        .video-card.show {
             opacity: 1;
-            transform: scale(1);
+            transform: translateX(0) rotate(0);
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px) rotate(0);
+            box-shadow: 
+                15px 15px 0 var(--paper-red),
+                20px 20px 30px rgba(0,0,0,0.15);
+        }
+
+        /* 卡片角落剪纸装饰 */
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 30px;
+            height: 30px;
+            background: var(--paper-red);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
         }
 
         .video-wrapper {
@@ -264,39 +384,32 @@
 
         .video-info {
             padding: 1.5rem;
+            border-top: 2px solid var(--paper-red);
         }
 
         .video-info h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 400;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .video-info p {
-            font-size: 0.9rem;
-            color: #888;
+            font-size: 0.85rem;
+            color: #777;
         }
 
         /* 作品卡片 */
-        .works-scroll {
-            display: flex;
-            gap: 3rem;
-            overflow-x: auto;
-            padding: 2rem 0;
-            scroll-snap-type: x mandatory;
-        }
-
         .work-card {
-            flex: 0 0 380px;
-            height: 450px;
+            flex: 0 0 340px;
+            height: 400px;
             scroll-snap-align: start;
             position: relative;
             overflow: hidden;
             opacity: 0;
-            transform: translateY(60px);
+            transform: translateY(50px);
         }
 
-        .work-card.reveal {
+        .work-card.show {
             opacity: 1;
             transform: translateY(0);
         }
@@ -304,31 +417,50 @@
         .work-bg {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--ochre) 0%, var(--cream) 100%);
+            background: linear-gradient(135deg, var(--paper-red) 0%, var(--paper-red-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.8s ease;
+            position: relative;
+            transition: all 0.5s;
+        }
+
+        /* 剪纸图案叠加 */
+        .work-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: var(--paper-red-dark);
+            clip-path: polygon(
+                50% 0%, 100% 50%, 50% 100%, 0% 50%
+            );
+            opacity: 0.5;
         }
 
         .work-card:hover .work-bg {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         .work-icon {
-            width: 100px;
-            height: 100px;
-            border: 2px solid var(--ink);
-            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+            width: 90px;
+            height: 90px;
+            border: 3px solid var(--paper-white);
             display: flex;
             align-items: center;
             justify-content: center;
+            background: var(--paper-red);
         }
 
         .work-icon svg {
-            width: 50px;
-            height: 50px;
-            stroke: var(--ink);
+            width: 45px;
+            height: 45px;
+            stroke: var(--paper-white);
             fill: none;
         }
 
@@ -337,10 +469,11 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 2rem;
-            background: linear-gradient(to top, rgba(26,26,26,0.95) 0%, transparent 100%);
+            padding: 1.5rem;
+            background: var(--paper-white);
+            border-top: 3px solid var(--paper-red);
             transform: translateY(100%);
-            transition: transform 0.5s ease;
+            transition: transform 0.4s;
         }
 
         .work-card:hover .work-overlay {
@@ -348,141 +481,134 @@
         }
 
         .work-overlay h3 {
-            color: var(--paper);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 0.3rem;
         }
 
         .work-overlay p {
-            color: var(--gold);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: var(--paper-red);
         }
 
         /* 联系区域 */
-        .contact-section {
+        #contact {
             text-align: center;
-            padding: 6rem 2rem;
         }
 
-        .contact-section h2 {
-            font-size: 2.5rem;
+        .contact-box {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: var(--paper-white);
+            border: 3px solid var(--paper-red);
+            position: relative;
+        }
+
+        .contact-box::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid var(--paper-red);
+        }
+
+        .contact-box h2 {
+            font-size: 2rem;
             font-weight: 300;
             letter-spacing: 0.3em;
             margin-bottom: 2rem;
         }
 
-        .contact-section p {
-            font-size: 1.15rem;
-            line-height: 2.2;
-            color: #666;
-            margin-bottom: 3rem;
+        .contact-box p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #555;
+            margin-bottom: 2rem;
         }
 
         .contact-btn {
             display: inline-block;
-            padding: 1rem 4rem;
-            background: var(--vermillion);
-            color: var(--paper);
+            padding: 1rem 3rem;
+            background: var(--paper-red);
+            color: var(--paper-white);
             text-decoration: none;
             font-size: 1rem;
             letter-spacing: 0.2em;
-            transition: all 0.4s;
+            transition: all 0.3s;
             border: none;
             cursor: pointer;
         }
 
         .contact-btn:hover {
-            background: var(--ink);
+            background: var(--ink-black);
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(194, 58, 43, 0.3);
         }
 
         /* 页脚 */
         footer {
-            background: var(--ink);
-            color: #666;
+            background: var(--paper-red);
+            color: var(--paper-white);
             text-align: center;
             padding: 3rem;
             font-size: 0.9rem;
+            letter-spacing: 0.1em;
         }
 
         /* 响应式 */
         @media (max-width: 768px) {
             .section {
-                padding: 6rem 8%;
+                padding: 6rem 6%;
             }
             
             .section-title {
                 font-size: 2.2rem;
             }
             
-            .video-card {
-                flex: 0 0 300px;
+            .hero-title {
+                font-size: 2.5rem;
             }
             
+            .hero-slogan {
+                font-size: 1.4rem;
+            }
+            
+            .video-card,
             .work-card {
-                flex: 0 0 300px;
-                height: 380px;
+                flex: 0 0 280px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 画卷卷轴 -->
-    <div class="scroll-left"></div>
-    <div class="scroll-right"></div>
+    <!-- 剪纸纹理 -->
+    <div class="paper-texture"></div>
+    
+    <!-- 剪纸装饰 -->
+    <div class="paper-cut-top"></div>
+    <div class="paper-cut-bottom"></div>
+    <div class="paper-cut-pattern pattern-left"></div>
+    <div class="paper-cut-pattern pattern-right"></div>
 
-    <!-- 背景层 -->
-    <div class="fixed-bg active"></div>
-
-    <div class="scroll-container">
+    <div class="container">
         <!-- 首页 -->
-        <section class="section-hero">
-            <div class="hero-bg"></div>
-            <div class="hero-content">
-                <div class="hero-logo" style="
-                    width: 140px;
-                    height: 140px;
-                    border: 3px solid var(--vermillion);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-family: 'Ma Shan Zheng', cursive;
-                    font-size: 1.8rem;
-                    color: var(--vermillion);
-                    margin-bottom: 2rem;
-                ">沐绘</div>
-                <h1 class="section-title" style="font-size: 4rem;">沐绘匠心</h1>
-                <p class="section-subtitle">东隅已逝，桑榆非晚</p>
+        <section class="section" id="hero">
+            <div class="hero-logo">
+                <div class="hero-logo-box">沐绘</div>
             </div>
-            <div style="
-                position: absolute;
-                bottom: 3rem;
-                left: 50%;
-                transform: translateX(-50%);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            ">
-                <span style="font-size: 0.8rem; color: #999; margin-bottom: 0.5rem;">向下滚动</span>
-                <div style="
-                    width: 20px;
-                    height: 20px;
-                    border-right: 2px solid var(--vermillion);
-                    border-bottom: 2px solid var(--vermillion);
-                    transform: rotate(45deg);
-                    animation: scrollBounce 2s infinite;
-                "></div>
-            </div>
+            <h1 class="hero-title">沐绘匠心</h1>
+            <p class="hero-slogan">东隅已逝，桑榆非晚</p>
         </section>
 
         <!-- 关于 -->
-        <section class="section" id="about">
+        <section class="section" id="about" style="background: var(--paper-white);">
             <div class="section-content">
                 <h2 class="section-title">关于</h2>
                 <p class="section-subtitle">致梦想主义者</p>
+                <div class="title-decoration"></div>
                 
-                <div class="text-block">
+                <div class="text-content">
                     <p>在这个快节奏、高效率、讲求"实用"的时代，</p>
                     <p>你或许常常感到格格不入。</p>
                     <p>当别人忙着低头赶路，你却抬头看天；</p>
@@ -496,18 +622,19 @@
                     <span class="tag">建筑设计</span>
                     <span class="tag">文化研究</span>
                     <span class="tag">传统营造</span>
-                    <span class="tag">西史辩伪</span>
-                </div>
+                    <span class史辩伪</span>
+                ="tag">西</div>
             </div>
         </section>
 
         <!-- 视频 -->
-        <section class="section" id="videos" style="background: var(--cream);">
+        <section class="section" id="videos">
             <div class="section-content">
                 <h2 class="section-title">视频</h2>
                 <p class="section-subtitle">文化复兴 · 西史辩伪</p>
+                <div class="title-decoration"></div>
                 
-                <div class="video-scroll">
+                <div class="card-container">
                     <div class="video-card">
                         <div class="video-wrapper">
                             <iframe src="https://www.douyin.com/iframe/7118415461530495272" allowfullscreen></iframe>
@@ -540,12 +667,13 @@
         </section>
 
         <!-- 作品 -->
-        <section class="section" id="works">
+        <section class="section" id="works" style="background: var(--paper-white);">
             <div class="section-content">
                 <h2 class="section-title">作品</h2>
                 <p class="section-subtitle">传承千年之魂 · 构筑时代之境</p>
+                <div class="title-decoration"></div>
                 
-                <div class="works-scroll">
+                <div class="card-container">
                     <div class="work-card">
                         <div class="work-bg">
                             <div class="work-icon">
@@ -584,7 +712,7 @@
                         </div>
                         <div class="work-overlay">
                             <h3>文化空间设计</h3>
-                            <p>博物馆、展厅，文创空间</p>
+                            <p>博物馆、展厅、文创空间</p>
                         </div>
                     </div>
                 </div>
@@ -592,9 +720,9 @@
         </section>
 
         <!-- 联系 -->
-        <section class="section" id="contact" style="background: var(--cream);">
+        <section class="section" id="contact">
             <div class="section-content">
-                <div class="contact-section">
+                <div class="contact-box">
                     <h2>开启你的东方美学空间</h2>
                     <p>
                         让传统与现代对话<br>
@@ -611,111 +739,59 @@
         </footer>
     </div>
 
-    <style>
-        @keyframes scrollBounce {
-            0%, 100% { transform: rotate(45deg) translateY(0); }
-            50% { transform: rotate(45deg) translateY(8px); }
-        }
-    </style>
-
     <script>
         // 注册 ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
 
-        // 画卷卷轴效果
-        gsap.to('.scroll-left', {
-            scrollTrigger: {
-                trigger: '.scroll-container',
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: 1
-            },
-            x: 0,
-            ease: 'none'
-        });
-
-        gsap.to('.scroll-right', {
-            scrollTrigger: {
-                trigger: '.scroll-container',
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: 1
-            },
-            x: 0,
-            ease: 'none'
-        });
-
-        // 章节显示动画
+        // 章节滚动动画
         gsap.utils.toArray('.section').forEach((section, i) => {
-            if (i === 0) return; // 跳过首页
-            
             gsap.to(section, {
                 scrollTrigger: {
                     trigger: section,
-                    start: 'top 80%',
-                    end: 'top 20%',
+                    start: 'top 75%',
                     toggleActions: 'play none none reverse'
                 },
-                opacity: 1,
-                y: 0,
+                className: '+=active',
                 duration: 1,
                 ease: 'power3.out'
             });
+        });
 
-            // 标题下划线动画
-            const title = section.querySelector('.section-title');
-            if (title) {
-                gsap.to(title, {
-                    scrollTrigger: {
-                        trigger: section,
-                        start: 'top 70%'
-                    },
-                    className: '+=expanded',
-                    duration: 0.1
-                });
-            }
-
-            // 文字逐段显示
-            const paragraphs = section.querySelectorAll('.text-block p');
-            paragraphs.forEach((p, j) => {
-                gsap.to(p, {
-                    scrollTrigger: {
-                        trigger: p,
-                        start: 'top 85%',
-                        toggleActions: 'play none none reverse'
-                    },
-                    className: '+=reveal',
-                    duration: 0.8,
-                    delay: j * 0.15,
-                    ease: 'power2.out'
-                });
+        // 文字逐段显示
+        gsap.utils.toArray('#about .text-content p').forEach((p, i) => {
+            gsap.to(p, {
+                scrollTrigger: {
+                    trigger: '#about',
+                    start: 'top 60%'
+                },
+                className: '+=show',
+                duration: 0.8,
+                delay: i * 0.2,
+                ease: 'power2.out'
             });
+        });
 
-            // 标签显示
-            const tags = section.querySelector('.tags');
-            if (tags) {
-                gsap.to(tags, {
-                    scrollTrigger: {
-                        trigger: tags,
-                        start: 'top 85%'
-                    },
-                    className: '+=reveal',
-                    duration: 0.8,
-                    ease: 'power2.out'
-                });
-            }
+        // 标签显示
+        gsap.to('#about .tags', {
+            scrollTrigger: {
+                trigger: '#about',
+                start: 'top 40%'
+            },
+            className: '+=show',
+            duration: 0.8,
+            ease: 'power2.out'
         });
 
         // 视频卡片动画
         gsap.utils.toArray('.video-card').forEach((card, i) => {
             gsap.to(card, {
                 scrollTrigger: {
-                    trigger: card,
-                    start: 'top 85%'
+                    trigger: '#videos',
+                    start: 'top 60%'
                 },
-                className: '+=reveal',
-                duration: 0.6,
-                delay: i * 0.2,
+                className: '+=show',
+                duration: 0.8,
+                delay: i * 0.25,
                 ease: 'power2.out'
             });
         });
@@ -724,38 +800,49 @@
         gsap.utils.toArray('.work-card').forEach((card, i) => {
             gsap.to(card, {
                 scrollTrigger: {
-                    trigger: card,
-                    start: 'top 85%'
+                    trigger: '#works',
+                    start: 'top 60%'
                 },
-                className: '+=reveal',
+                className: '+=show',
                 duration: 0.8,
                 delay: i * 0.2,
                 ease: 'power2.out'
             });
         });
 
-        // 视差背景效果
-        gsap.to('.hero-bg', {
+        // 首页动画
+        gsap.from('#hero .hero-logo', {
             scrollTrigger: {
-                trigger: '.section-hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: true
-            },
-            y: 200,
-            ease: 'none'
-        });
-
-        // 首页文字动画
-        gsap.from('.hero-content > *', {
-            scrollTrigger: {
-                trigger: '.section-hero',
+                trigger: '#hero',
                 start: 'top top'
             },
-            y: 60,
+            scale: 0.5,
             opacity: 0,
-            duration: 1.2,
-            stagger: 0.2,
+            duration: 1,
+            ease: 'back.out(1.7)'
+        });
+
+        gsap.from('#hero h1', {
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top'
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        gsap.from('#hero .hero-slogan', {
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top'
+            },
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            delay: 0.6,
             ease: 'power3.out'
         });
     </script>
