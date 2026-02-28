@@ -13,6 +13,7 @@
             --gold: #c9a227;
             --ink: #0d0d0d;
             --paper: #f0ebe0;
+            --paper-light: #fff9f0;
         }
 
         * {
@@ -32,12 +33,124 @@
             line-height: 1.9;
         }
 
-        /* 全屏区块 */
+        /* ========== 剪纸风格 - 锯齿边 ========== */
+        .zigzag-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(135deg, transparent 50%, var(--paper) 50%),
+                        linear-gradient(225deg, transparent 50%, var(--paper) 50%);
+            background-size: 30px 30px;
+            background-position: 0 -15px, 15px -15px;
+            z-index: 10;
+        }
+
+        .zigzag-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(45deg, transparent 50%, var(--paper) 50%),
+                        linear-gradient(315deg, transparent 50%, var(--paper) 50%);
+            background-size: 30px 30px;
+            background-position: 0 15px, 15px 15px;
+            z-index: 10;
+        }
+
+        /* ========== 剪纸风格 - 窗花装饰 ========== */
+        .window-flower {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            opacity: 0.08;
+            pointer-events: none;
+        }
+
+        .window-flower::before,
+        .window-flower::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid var(--cinnabar);
+        }
+
+        .window-flower::before {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .window-flower::after {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border-color: var(--gold);
+        }
+
+        .window-flower.top-right {
+            top: 80px;
+            right: 60px;
+            transform: rotate(15deg);
+        }
+
+        .window-flower.bottom-left {
+            bottom: 100px;
+            left: 40px;
+            transform: rotate(-20deg);
+        }
+
+        /* ========== 剪纸风格 - 卡片阴影 ========== */
+        .paper-card {
+            background: var(--paper);
+            color: var(--ink);
+            position: relative;
+            box-shadow: 
+                4px 4px 0 var(--cinnabar),
+                8px 8px 0 rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .paper-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 
+                6px 6px 0 var(--cinnabar),
+                12px 12px 0 rgba(0,0,0,0.3);
+        }
+
+        /* 卡片角落剪纸装饰 */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 30px;
+            height: 30px;
+            background: var(--cinnabar);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+        }
+
+        /* ========== 全屏区块 */
         .panel {
             min-height: 100vh;
             padding: 8rem 10%;
             position: relative;
             overflow: hidden;
+        }
+
+        /* 面板红色装饰边 */
+        .panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cinnabar), var(--gold), var(--cinnabar));
         }
 
         /* 背景装饰 */
@@ -297,6 +410,24 @@
             opacity: 0;
             transform: translateY(40px);
             transition: all 0.8s ease;
+            /* 剪纸风格 */
+            background: var(--paper-light);
+            color: var(--ink);
+            box-shadow: 
+                3px 3px 0 var(--cinnabar),
+                6px 6px 0 rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            background: var(--cinnabar);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
         }
 
         .panel.visible .video-card {
@@ -352,6 +483,23 @@
             opacity: 0;
             transform: translateY(40px);
             transition: all 0.8s ease;
+            /* 剪纸风格 */
+            background: var(--paper-light);
+            box-shadow: 
+                4px 4px 0 var(--cinnabar),
+                8px 8px 0 rgba(0,0,0,0.25);
+        }
+
+        .work-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 30px;
+            height: 30px;
+            background: var(--cinnabar);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+            z-index: 5;
         }
 
         .panel.visible .work-card {
@@ -493,6 +641,9 @@
 
     <!-- 首页 -->
     <section class="panel" id="hero">
+        <div class="zigzag-top"></div>
+        <div class="window-flower top-right"></div>
+        <div class="window-flower bottom-left"></div>
         <div class="panel-inner">
             <div class="hero-center">
                 <div class="logo">沐绘</div>
@@ -504,10 +655,13 @@
             <span>SCROLL</span>
             <div class="scroll-line"></div>
         </div>
+        <div class="zigzag-bottom"></div>
     </section>
 
     <!-- 关于 -->
     <section class="panel" id="about">
+        <div class="zigzag-top"></div>
+        <div class="window-flower top-right"></div>
         <div class="panel-inner">
             <div class="section-title">
                 <h2>关于</h2>
@@ -533,6 +687,7 @@
 
     <!-- 视频 -->
     <section class="panel" id="videos">
+        <div class="zigzag-top"></div>
         <div class="panel-inner">
             <div class="section-title">
                 <h2>视频</h2>
@@ -567,6 +722,8 @@
 
     <!-- 作品 -->
     <section class="panel" id="works">
+        <div class="zigzag-top"></div>
+        <div class="window-flower bottom-left"></div>
         <div class="panel-inner">
             <div class="section-title">
                 <h2>作品</h2>
@@ -613,8 +770,11 @@
 
     <!-- 联系 -->
     <section class="panel" id="contact">
+        <div class="zigzag-top"></div>
+        <div class="window-flower top-right"></div>
+        <div class="window-flower bottom-left"></div>
         <div class="panel-inner">
-            <div class="contact-box">
+            <div class="contact-box paper-card">
                 <h2>开启你的东方美学空间</h2>
                 <p>
                     让传统与现代对话<br>
